@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Placeholder from './components/Placeholder/Placeholder';
+import PasswordConfig from './components/PasswordConfig/PasswordConfig';
 
 import './App.less';
 
 const App = () => {
   return (
     <div className="App">
-      <Placeholder />
+      <PasswordConfig />
     </div>
   );
 };
