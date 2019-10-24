@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Card, Checkbox, InputNumber } from 'antd';
+import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import { generatePassword } from '../utils/password';
 
 import './styles.less';
+
+const { TextArea } = Input;
 
 const PasswordConfig = () => {
   const [length, setLength] = useState(4);
@@ -11,8 +13,8 @@ const PasswordConfig = () => {
   const [lowerChecked, setLowerChecked] = useState(true);
   const [numbersChecked, setNumbersChecked] = useState(true);
   const [symbolsChecked, setSymbolsChecked] = useState(true);
-
-  let passwordString = '';
+  const [passGenerated, setPassGenerated] = useState(false);
+  let [passwordString, setPasswordString] = useState('');
 
   const genPassword = () => {
     passwordString = generatePassword(
@@ -22,7 +24,16 @@ const PasswordConfig = () => {
       numbersChecked,
       symbolsChecked
     );
-    console.log(passwordString);
+    setPassGenerated(true);
+    setPasswordString(passwordString);
+  };
+
+  const copyPassword = () => {
+    let password = document.getElementById('password');
+    password.select();
+    password.setSelectionRange(0, 99999);
+
+    document.execCommand('copy');
   };
 
   return (
@@ -33,7 +44,7 @@ const PasswordConfig = () => {
     >
       <div className="settings">
         <div className="setting">
-          <p>Password length:</p>
+          <p>Password length</p>
           <InputNumber
             placeholder={4}
             min={4}
@@ -73,6 +84,17 @@ const PasswordConfig = () => {
           Generate
         </Button>
       </div>
+      {passGenerated ? (
+        <div className="setting">
+          <TextArea
+            id="password"
+            value={passwordString}
+            autoSize={{ minRows: 2, maxRows: 6 }}
+            style={{ width: '150px' }}
+          />
+          <Icon type="copy" onClick={() => copyPassword()} />
+        </div>
+      ) : null}
     </Card>
   );
 };
