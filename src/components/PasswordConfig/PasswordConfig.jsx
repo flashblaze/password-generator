@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import { Button, Card, Checkbox, InputNumber } from 'antd';
 
+import { generatePassword } from '../utils/password';
+
 import './styles.less';
 
 const PasswordConfig = () => {
-  const [length, setLength] = useState(0);
+  const [length, setLength] = useState(4);
   const [upperChecked, setUpperChecked] = useState(true);
   const [lowerChecked, setLowerChecked] = useState(true);
   const [numbersChecked, setNumbersChecked] = useState(true);
   const [symbolsChecked, setSymbolsChecked] = useState(true);
+
+  let passwordString = '';
+
+  const genPassword = () => {
+    passwordString = generatePassword(
+      length,
+      upperChecked,
+      lowerChecked,
+      numbersChecked,
+      symbolsChecked
+    );
+    console.log(passwordString);
+  };
 
   return (
     <Card
@@ -54,7 +69,9 @@ const PasswordConfig = () => {
             checked={symbolsChecked}
           />
         </div>
-        <Button type="primary">Generate</Button>
+        <Button type="primary" onClick={() => genPassword()}>
+          Generate
+        </Button>
       </div>
     </Card>
   );
