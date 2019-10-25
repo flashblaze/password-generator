@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import PasswordConfig from './components/PasswordConfig/PasswordConfig';
 import { auth, createUserProfile } from './firebase/firebase.utils';
-// import { setCurrentUser } from './redux/actions/user-action';
+import { setCurrentUser } from './redux/actions/user-action';
 
 import './App.less';
 
 const App = () => {
-  const [currentUser, setCurrentUser] = useState('');
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
-      createUserProfile(user);
-      setCurrentUser(user);
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfile(userAuth);
+        userRef.onSnapshot(snapShot => {
+          dispatch(setCurrentUser({ id: snapShot.id, ...snapShot.data() }));
+        });
+      } else {
+        dispatch(setCurrentUser(userAuth));
+      }
     });
-    console.log(currentUser);
+
     return function unsSub() {
       unsubscribeFromAuth();
     };
-  });
+  }, [dispatch]);
   return (
     <div className="App">
       <PasswordConfig />
