@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import PasswordConfig from './components/PasswordConfig/PasswordConfig';
-import PasswordManager from './components/PasswordManager/PasswordManager';
 import { auth, createUserProfile } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/actions/user-action';
 
 import './App.less';
 
 const App = () => {
-  const [userId, setUserId] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,11 +15,9 @@ const App = () => {
       if (userAuth) {
         const userRef = await createUserProfile(userAuth);
         userRef.onSnapshot(snapShot => {
-          setUserId(snapShot.id);
           dispatch(setCurrentUser({ id: snapShot.id, ...snapShot.data() }));
         });
       } else {
-        setUserId(userAuth);
         dispatch(setCurrentUser(userAuth));
       }
     });
@@ -33,7 +29,6 @@ const App = () => {
   return (
     <div className="App">
       <PasswordConfig />
-      {userId ? <PasswordManager /> : null}
     </div>
   );
 };

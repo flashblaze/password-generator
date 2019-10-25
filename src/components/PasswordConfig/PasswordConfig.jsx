@@ -4,6 +4,7 @@ import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
+import PasswordManager from '../PasswordManager/PasswordManager';
 import { generatePassword } from '../utils/password';
 
 import './styles.less';
@@ -86,9 +87,12 @@ const PasswordConfig = () => {
               checked={symbolsChecked}
             />
           </div>
-          <Button type="primary" onClick={() => genPassword()}>
-            Generate
-          </Button>
+          <div className="buttons">
+            <Button type="primary" onClick={() => genPassword()}>
+              Generate
+            </Button>
+            {currentUser ? <PasswordManager /> : null}
+          </div>
         </div>
         {passGenerated ? (
           <div className="setting">
