@@ -20,7 +20,6 @@ const PasswordConfig = () => {
   let [passwordString, setPasswordString] = useState('');
 
   const currentUser = useSelector(state => state.user.currentUser);
-  console.log(currentUser);
 
   const genPassword = () => {
     passwordString = generatePassword(
