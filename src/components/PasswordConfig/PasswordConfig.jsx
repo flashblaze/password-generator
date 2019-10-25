@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import SignIn from '../SignIn/SignIn';
@@ -17,6 +18,9 @@ const PasswordConfig = () => {
   const [symbolsChecked, setSymbolsChecked] = useState(true);
   const [passGenerated, setPassGenerated] = useState(false);
   let [passwordString, setPasswordString] = useState('');
+
+  const currentUser = useSelector(state => state.user.currentUser);
+  console.log(currentUser);
 
   const genPassword = () => {
     passwordString = generatePassword(
@@ -99,10 +103,7 @@ const PasswordConfig = () => {
           </div>
         ) : null}
       </Card>
-      <div className="buttons">
-        <SignIn />
-        <SignOut />
-      </div>
+      <div className="buttons">{!currentUser ? <SignIn /> : <SignOut />}</div>
     </div>
   );
 };

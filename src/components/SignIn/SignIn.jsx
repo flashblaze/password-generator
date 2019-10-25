@@ -1,13 +1,18 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 
 import { signInWithGoogle } from '../../firebase/firebase.utils';
 
 const SignIn = () => {
   return (
-    <Button type="primary" icon="google" onClick={signInWithGoogle}>
-      Sign In
-    </Button>
+    <Popover
+      content={<p>Sign In for additional features</p>}
+      placement="bottom"
+    >
+      <Button type="default" icon="google" onClick={signInWithGoogle}>
+        Sign In
+      </Button>
+    </Popover>
   );
 };
 
