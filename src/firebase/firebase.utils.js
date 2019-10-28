@@ -37,6 +37,20 @@ export const createUserProfile = async (userAuth, additionalData) => {
   return userRef;
 };
 
+export const saveHashedPassword = async hashedPassword => {
+  const passRef = firestore.doc('passwords/sampleString');
+  const snapShot = await passRef.get();
+  if (!snapShot.exists) {
+    try {
+      await passRef.set({
+        hashedPassword
+      });
+    } catch (e) {
+      console.log(`Error storing password ${e.message}`);
+    }
+  }
+};
+
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

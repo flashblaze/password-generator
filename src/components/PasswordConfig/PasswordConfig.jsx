@@ -12,7 +12,7 @@ import './styles.less';
 const { TextArea } = Input;
 
 const PasswordConfig = () => {
-  const [length, setLength] = useState(4);
+  const [length, setLength] = useState(8);
   const [upperChecked, setUpperChecked] = useState(true);
   const [lowerChecked, setLowerChecked] = useState(true);
   const [numbersChecked, setNumbersChecked] = useState(true);
