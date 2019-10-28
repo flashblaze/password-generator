@@ -5,7 +5,7 @@ import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
 import PasswordManager from '../PasswordManager/PasswordManager';
-import { generatePassword } from '../utils/password';
+import { generatePassword } from '../../utils/password';
 
 import './styles.less';
 
@@ -88,10 +88,14 @@ const PasswordConfig = () => {
             />
           </div>
           <div className="buttons">
-            <Button type="primary" onClick={() => genPassword()}>
+            {currentUser ? <PasswordManager /> : null}
+            <Button
+              type="primary"
+              style={{ float: 'right' }}
+              onClick={() => genPassword()}
+            >
               Generate
             </Button>
-            {currentUser ? <PasswordManager /> : null}
           </div>
         </div>
         {passGenerated ? (
@@ -102,11 +106,20 @@ const PasswordConfig = () => {
               autoSize={{ minRows: 2, maxRows: 6 }}
               style={{ width: '150px' }}
             />
-            <Icon type="copy" onClick={() => copyPassword()} />
+            <div>
+              <Icon
+                type="copy"
+                onClick={() => copyPassword()}
+                style={{ marginRight: '20px' }}
+              />
+              <Icon type="delete" onClick={() => setPasswordString('')} />
+            </div>
           </div>
         ) : null}
       </Card>
-      <div className="buttons">{!currentUser ? <SignIn /> : <SignOut />}</div>
+      <div style={{ margin: '20px 0', float: 'right' }}>
+        {!currentUser ? <SignIn /> : <SignOut />}
+      </div>
     </div>
   );
 };
