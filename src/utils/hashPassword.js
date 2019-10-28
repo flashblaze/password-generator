@@ -1,9 +1,13 @@
 const bcrypt = require('bcryptjs');
 
-const genHashedPassword = async plainTextPassword => {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(plainTextPassword, salt);
-  return hashedPassword;
+const genHashedPassword = plainTextPassword => {
+  if (plainTextPassword === '') {
+    return null;
+  } else {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(plainTextPassword, salt);
+    return hashedPassword;
+  }
 };
 
 module.exports = {

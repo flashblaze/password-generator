@@ -6,7 +6,6 @@ import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
 import PasswordManager from '../PasswordManager/PasswordManager';
 import { generatePassword } from '../../utils/password';
-import { genHashedPassword } from '../../utils/hashPassword';
 
 import './styles.less';
 
@@ -22,8 +21,7 @@ const PasswordConfig = () => {
   let [passwordString, setPasswordString] = useState('');
 
   const currentUser = useSelector(state => state.user.currentUser);
-
-  const genPassword = async () => {
+  const genPassword = () => {
     passwordString = generatePassword(
       length,
       upperChecked,
@@ -33,9 +31,6 @@ const PasswordConfig = () => {
     );
     setPassGenerated(true);
     setPasswordString(passwordString);
-
-    let res = await genHashedPassword(passwordString);
-    console.log(res);
   };
 
   const copyPassword = () => {
@@ -92,7 +87,9 @@ const PasswordConfig = () => {
             />
           </div>
           <div className="buttons">
-            {currentUser ? <PasswordManager /> : null}
+            {currentUser ? (
+              <PasswordManager passwordString={passwordString} />
+            ) : null}
             <Button
               type="primary"
               style={{ float: 'right' }}

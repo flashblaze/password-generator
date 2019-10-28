@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Drawer, Button } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row } from 'antd';
 
-const PasswordManager = () => {
+import { genHashedPassword } from '../../utils/hashPassword';
+import './styles.less';
+
+const PasswordManager = ({ passwordString }) => {
   const [visible, setVisible] = useState(false);
+  let hashedPassword = genHashedPassword(passwordString);
 
   return (
     <div>
@@ -13,9 +17,37 @@ const PasswordManager = () => {
         title="Password Manager"
         placement="right"
         closable={false}
+        width={550}
         onClose={() => setVisible(false)}
         visible={visible}
-      ></Drawer>
+      >
+        <Form layout="vertical" hideRequiredMark>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Name">
+                <Input placeholder="Enter name of website" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Password">
+                <Input
+                  style={{ width: '100%' }}
+                  placeholder="Hashed password will go here"
+                  value={hashedPassword}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <div className="buttons">
+            <Button type="default" onClick={() => setVisible(false)}>
+              Cancel
+            </Button>
+            <Button type="primary" onClick={() => setVisible(true)}>
+              Submit
+            </Button>
+          </div>
+        </Form>
+      </Drawer>
     </div>
   );
 };
