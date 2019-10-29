@@ -5,12 +5,14 @@ import { genHashedPassword } from '../../utils/hashPassword';
 import { saveHashedPassword } from '../../firebase/firebase.utils';
 import './styles.less';
 
-const PasswordManager = ({ passwordString }) => {
+const PasswordManager = ({ passwordString, uid }) => {
   const [visible, setVisible] = useState(false);
-  let hashedPassword = genHashedPassword(passwordString);
+  const [websiteName, setWebsiteName] = useState('');
 
   const savePasswordInDatabase = () => {
-    saveHashedPassword(hashedPassword);
+    let hashedPassword = genHashedPassword(passwordString);
+    saveHashedPassword(websiteName, hashedPassword, uid);
+    setWebsiteName('');
   };
 
   return (
@@ -30,15 +32,19 @@ const PasswordManager = ({ passwordString }) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Name">
-                <Input placeholder="Enter name of website" />
+                <Input
+                  placeholder="Name of website/account"
+                  onChange={e => setWebsiteName(e.target.value)}
+                  value={websiteName}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Password">
-                <Input
+                <Input.Password
                   style={{ width: '100%' }}
-                  placeholder="Hashed password will go here"
-                  value={hashedPassword}
+                  placeholder="Password"
+                  value={passwordString}
                 />
               </Form.Item>
             </Col>

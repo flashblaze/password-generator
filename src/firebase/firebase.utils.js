@@ -37,12 +37,13 @@ export const createUserProfile = async (userAuth, additionalData) => {
   return userRef;
 };
 
-export const saveHashedPassword = async hashedPassword => {
-  const passRef = firestore.doc('passwords/sampleString');
+export const saveHashedPassword = async (websiteName, hashedPassword, uid) => {
+  const passRef = firestore.doc(`passwords/${uid}`);
   const snapShot = await passRef.get();
   if (!snapShot.exists) {
     try {
       await passRef.set({
+        websiteName,
         hashedPassword
       });
     } catch (e) {

@@ -42,12 +42,8 @@ const PasswordConfig = () => {
   };
 
   return (
-    <div>
-      <Card
-        style={{ width: 300 }}
-        title="Generate Password"
-        className="container"
-      >
+    <div className="container">
+      <Card title="Generate Password">
         <div className="settings">
           <div className="setting">
             <p>Password length</p>
@@ -88,7 +84,10 @@ const PasswordConfig = () => {
           </div>
           <div className="buttons">
             {currentUser ? (
-              <PasswordManager passwordString={passwordString} />
+              <PasswordManager
+                passwordString={passwordString}
+                uid={currentUser.id}
+              />
             ) : null}
             <Button
               type="primary"
