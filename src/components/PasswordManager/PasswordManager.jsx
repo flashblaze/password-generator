@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Col, Drawer, Form, Input, Row } from 'antd';
 
 import { genHashedPassword } from '../../utils/hashPassword';
@@ -8,11 +8,17 @@ import './styles.less';
 const PasswordManager = ({ passwordString, uid }) => {
   const [visible, setVisible] = useState(false);
   const [websiteName, setWebsiteName] = useState('');
+  const [plainPassword, setPlainPassword] = useState('');
+
+  useEffect(() => {
+    setPlainPassword(passwordString);
+  }, [passwordString]);
 
   const savePasswordInDatabase = () => {
     let hashedPassword = genHashedPassword(passwordString);
     saveHashedPassword(websiteName, hashedPassword, uid);
     setWebsiteName('');
+    setPlainPassword('');
   };
 
   return (
@@ -44,7 +50,7 @@ const PasswordManager = ({ passwordString, uid }) => {
                 <Input.Password
                   style={{ width: '100%' }}
                   placeholder="Password"
-                  value={passwordString}
+                  value={plainPassword}
                 />
               </Form.Item>
             </Col>
