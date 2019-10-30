@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Col, Drawer, Form, Input, Row } from 'antd';
 
+import ViewPasswords from '../ViewPasswords/ViewPasswords';
 import { genHashedPassword } from '../../utils/hashPassword';
 import { saveHashedPassword } from '../../firebase/firebase.utils';
 import './styles.less';
@@ -79,6 +80,7 @@ const PasswordManager = ({ passwordString, uid }) => {
             </Button>
           </div>
         </Form>
+        <ViewPasswords />
       </Drawer>
     </div>
   );

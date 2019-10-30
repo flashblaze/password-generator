@@ -63,6 +63,18 @@ export const saveHashedPassword = async (
   }
 };
 
+export const getPasswords = async () => {
+  const passRef = firestore.collection('passwords');
+  const passSnapShot = await passRef.get();
+
+  let passwordsData = [];
+
+  passSnapShot.forEach(doc => {
+    passwordsData.push(doc.data());
+  });
+  return passwordsData;
+};
+
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
