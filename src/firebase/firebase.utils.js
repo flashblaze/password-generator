@@ -42,7 +42,9 @@ export const saveHashedPassword = async (
   uid
 ) => {
   const websiteName = originalWebsiteName.toLowerCase().replace(' ', '_');
-  const passRef = firestore.doc(`passwords/${uid}-${websiteName}`);
+  const passRef = firestore.doc(
+    `passwords/${uid}/${uid}/${uid}-${websiteName}`
+  );
   const passDoc = await passRef.get();
 
   // If the webiste name matches with the one in firestore,
@@ -64,14 +66,12 @@ export const saveHashedPassword = async (
 };
 
 export const getPasswords = async uid => {
-  const passRef = firestore.collection('passwords');
+  const passRef = firestore.collection(`passwords/${uid}/${uid}`);
   const passSnapShot = await passRef.get();
   let passwordsData = [];
 
   passSnapShot.forEach(doc => {
-    if (doc.id.split('-')[0] === uid) {
-      passwordsData.push(doc.data());
-    }
+    passwordsData.push(doc.data());
   });
   return passwordsData;
 };
