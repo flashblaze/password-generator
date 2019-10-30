@@ -45,6 +45,12 @@ const PasswordConfig = () => {
     <div className="container">
       <Card title="Generate Password">
         <div className="settings">
+          {currentUser ? (
+            <h4 style={{ padding: 10 }}>
+              Welcome <b>{currentUser.displayName}</b>
+            </h4>
+          ) : null}
+
           <div className="setting">
             <p>Password length</p>
             <InputNumber

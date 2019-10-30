@@ -36,12 +36,22 @@ export const createUserProfile = async (userAuth, additionalData) => {
   return userRef;
 };
 
-export const saveHashedPassword = async (websiteName, hashedPassword, uid) => {
+export const saveHashedPassword = async (
+  originalWebsiteName,
+  hashedPassword,
+  uid
+) => {
+  const websiteName = originalWebsiteName.toLowerCase().replace(' ', '_');
   const passRef = firestore.doc(`passwords/${uid}-${websiteName}`);
   const passDoc = await passRef.get();
+
+  // If the webiste name matches with the one in firestore,
+  // it will not create another password, nor will it replace the one saved
+
   if (!passDoc.exists) {
     try {
       await passRef.set({
+        originalWebsiteName,
         websiteName,
         hashedPassword
       });
@@ -49,7 +59,7 @@ export const saveHashedPassword = async (websiteName, hashedPassword, uid) => {
       console.log(`Error storing password ${e.message}`);
     }
   } else {
-    console.log('Website/Account already added: ', passDoc.data());
+    return 'Exists';
   }
 };
 

@@ -17,13 +17,19 @@ const PasswordManager = ({ passwordString, uid }) => {
   const savePasswordInDatabase = e => {
     e.preventDefault();
     let hashedPassword = genHashedPassword(passwordString);
-    saveHashedPassword(
-      websiteName.toLowerCase().replace(' ', '_'),
-      hashedPassword,
-      uid
-    );
-    setWebsiteName('');
-    setPlainPassword('');
+    let res = saveHashedPassword(websiteName, hashedPassword, uid);
+    res
+      .then(res => {
+        if (res === 'Exists') {
+          alert(`Password for ${websiteName} already exists`);
+        } else {
+          setWebsiteName('');
+          setPlainPassword('');
+        }
+      })
+      .catch(e => {
+        console.log(`Error: ${e.message}`);
+      });
   };
 
   return (
