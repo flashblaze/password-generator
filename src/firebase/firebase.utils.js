@@ -18,7 +18,6 @@ export const createUserProfile = async (userAuth, additionalData) => {
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const snapShot = await userRef.get();
-
   if (!snapShot.exists) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
@@ -39,13 +38,18 @@ export const createUserProfile = async (userAuth, additionalData) => {
 
 export const saveHashedPassword = async (websiteName, hashedPassword, uid) => {
   const passRef = firestore.doc(`passwords/${uid}-${websiteName}`);
-  try {
-    await passRef.set({
-      websiteName,
-      hashedPassword
-    });
-  } catch (e) {
-    console.log(`Error storing password ${e.message}`);
+  const passDoc = await passRef.get();
+  if (!passDoc.exists) {
+    try {
+      await passRef.set({
+        websiteName,
+        hashedPassword
+      });
+    } catch (e) {
+      console.log(`Error storing password ${e.message}`);
+    }
+  } else {
+    console.log('Website/Account already added: ', passDoc.data());
   }
 };
 
