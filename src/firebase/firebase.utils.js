@@ -38,17 +38,14 @@ export const createUserProfile = async (userAuth, additionalData) => {
 };
 
 export const saveHashedPassword = async (websiteName, hashedPassword, uid) => {
-  const passRef = firestore.doc(`passwords/${uid}`);
-  const snapShot = await passRef.get();
-  if (!snapShot.exists) {
-    try {
-      await passRef.set({
-        websiteName,
-        hashedPassword
-      });
-    } catch (e) {
-      console.log(`Error storing password ${e.message}`);
-    }
+  const passRef = firestore.doc(`passwords/${uid}-${websiteName}`);
+  try {
+    await passRef.set({
+      websiteName,
+      hashedPassword
+    });
+  } catch (e) {
+    console.log(`Error storing password ${e.message}`);
   }
 };
 

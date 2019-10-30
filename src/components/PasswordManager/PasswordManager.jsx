@@ -14,9 +14,14 @@ const PasswordManager = ({ passwordString, uid }) => {
     setPlainPassword(passwordString);
   }, [passwordString]);
 
-  const savePasswordInDatabase = () => {
+  const savePasswordInDatabase = e => {
+    e.preventDefault();
     let hashedPassword = genHashedPassword(passwordString);
-    saveHashedPassword(websiteName, hashedPassword, uid);
+    saveHashedPassword(
+      websiteName.toLowerCase().replace(' ', '_'),
+      hashedPassword,
+      uid
+    );
     setWebsiteName('');
     setPlainPassword('');
   };
@@ -34,7 +39,11 @@ const PasswordManager = ({ passwordString, uid }) => {
         onClose={() => setVisible(false)}
         visible={visible}
       >
-        <Form layout="vertical" hideRequiredMark>
+        <Form
+          layout="vertical"
+          hideRequiredMark
+          onSubmit={e => savePasswordInDatabase(e)}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Name">
@@ -59,7 +68,7 @@ const PasswordManager = ({ passwordString, uid }) => {
             <Button type="default" onClick={() => setVisible(false)}>
               Cancel
             </Button>
-            <Button type="primary" onClick={() => savePasswordInDatabase()}>
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </div>
