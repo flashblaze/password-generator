@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Dropdown, Icon, Input, Menu } from 'antd';
 
 import './styles.less';
+import { useSelector } from 'react-redux';
 import { getPasswords } from '../../firebase/firebase.utils';
 
 const ViewPasswords = () => {
@@ -9,8 +10,10 @@ const ViewPasswords = () => {
   const [hashedPass, setHashedPass] = useState('');
   let placeholder = [];
 
+  const currentUser = useSelector(state => state.user.currentUser);
+
   const getPass = async () => {
-    let res = await getPasswords();
+    let res = await getPasswords(currentUser.id);
     res.forEach(passData => {
       placeholder.push(passData);
     });
@@ -24,11 +27,15 @@ const ViewPasswords = () => {
 
   const menu = (
     <Menu onClick={e => displayPassword(e)}>
-      {passwordsData.map(passwordData => (
-        <Menu.Item key={passwordData.websiteName}>
-          <p>{passwordData.originalWebsiteName}</p>
-        </Menu.Item>
-      ))}
+      {passwordsData.length !== 0 ? (
+        passwordsData.map(passwordData => (
+          <Menu.Item key={passwordData.websiteName}>
+            <p>{passwordData.originalWebsiteName}</p>
+          </Menu.Item>
+        ))
+      ) : (
+        <Menu.Item disabled>No Password</Menu.Item>
+      )}
     </Menu>
   );
 
