@@ -50,12 +50,14 @@ export const saveHashedPassword = async (
   // If the webiste name matches with the one in firestore,
   // it will not create another password, nor will it replace the one saved
 
+  const createdAt = new Date();
   if (!passDoc.exists) {
     try {
       await passRef.set({
         originalWebsiteName,
         websiteName,
-        hashedPassword
+        hashedPassword,
+        createdAt
       });
     } catch (e) {
       console.log(`Error storing password ${e.message}`);
@@ -74,6 +76,33 @@ export const getPasswords = async uid => {
     passwordsData.push(doc.data());
   });
   return passwordsData;
+};
+
+export const storeMasterPassword = async (encryptedMasterPassword, uid) => {
+  const masterPassRef = firestore.collection(`masterPasswords/${uid}/${uid}`);
+
+  const masterPassColl = await masterPassRef.get();
+  const createdAt = new Date();
+  if (masterPassColl.empty) {
+    try {
+      await masterPassRef.add({
+        encryptedMasterPassword,
+        createdAt
+      });
+    } catch (e) {
+      console.log(`Error storing master password ${e.mesage}`);
+    }
+  } else {
+    return 'Exists';
+  }
+  return masterPassRef;
+};
+
+export const getMasterPasswordFirestore = async uid => {
+  const masterPassRef = firestore.collection(`masterPasswords/${uid}/${uid}`);
+
+  const masterPassColl = await masterPassRef.get();
+  return masterPassColl.docs[0].data();
 };
 
 firebase.initializeApp(firebaseConfig);

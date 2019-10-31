@@ -4,6 +4,7 @@ import { Button, Input, Modal } from 'antd';
 
 import { encryptMasterPassword } from '../../utils/hashPassword';
 import { setMasterPassword } from '../../redux/actions/password-action';
+import { storeMasterPassword } from '../../firebase/firebase.utils';
 
 const MasterPassword = ({ uid }) => {
   const [visible, setVisible] = useState(false);
@@ -14,12 +15,15 @@ const MasterPassword = ({ uid }) => {
   // useState did not work
   let encryptedMasterPassword;
 
-  const saveMasterPassword = () => {
+  const saveMasterPassword = async () => {
     // useState did not work
     encryptedMasterPassword = encryptMasterPassword(plainPassword, uid);
+    let retVal = await storeMasterPassword(encryptedMasterPassword, uid);
+    if (retVal !== 'Exists') {
+      dispatch(setMasterPassword(encryptedMasterPassword));
+      setVisible(false);
+    }
 
-    dispatch(setMasterPassword(encryptedMasterPassword));
-    setVisible(false);
     setPlainPassword('');
   };
 

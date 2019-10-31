@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import SignIn from '../SignIn/SignIn';
@@ -7,6 +7,8 @@ import SignOut from '../SignOut/SignOut';
 import PasswordManager from '../PasswordManager/PasswordManager';
 import MasterPassword from '../MasterPassword/MasterPassword';
 import { generatePassword } from '../../utils/password';
+import { getMasterPasswordFirestore } from '../../firebase/firebase.utils';
+import { setMasterPassword } from '../../redux/actions/password-action';
 
 import './styles.less';
 
@@ -25,7 +27,22 @@ const PasswordConfig = () => {
   const masterPassword = useSelector(
     state => state.masterPassword.masterPassword
   );
-  console.log(masterPassword);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    async function checkMasterPassword() {
+      if (currentUser !== null) {
+        let val = await getMasterPasswordFirestore(currentUser.id);
+        dispatch(setMasterPassword(val.encryptedMasterPassword));
+        console.log('rendered');
+      }
+
+      console.log('rendered');
+    }
+
+    checkMasterPassword();
+    console.log('rendered');
+  }, [dispatch, currentUser]);
+
   const genPassword = () => {
     passwordString = generatePassword(
       length,
