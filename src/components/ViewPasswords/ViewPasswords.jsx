@@ -3,21 +3,17 @@ import { Button, Dropdown, Icon, Input, Menu } from 'antd';
 
 import './styles.less';
 import { useSelector } from 'react-redux';
-import { getPasswords } from '../../firebase/firebase.utils';
+import { decryptPassword } from '../../utils/hashPassword';
 
 const ViewPasswords = () => {
   let [passwordsData, setPasswordsData] = useState([]);
   const [hashedPass, setHashedPass] = useState('');
-  let placeholder = [];
 
   const currentUser = useSelector(state => state.user.currentUser);
 
   const getPass = async () => {
-    let res = await getPasswords(currentUser.id);
-    res.forEach(passData => {
-      placeholder.push(passData);
-    });
-    setPasswordsData([...placeholder]);
+    let res = await decryptPassword(currentUser.id);
+    setPasswordsData([...res]);
   };
 
   const displayPassword = e => {

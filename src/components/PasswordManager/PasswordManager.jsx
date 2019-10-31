@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Col, Drawer, Form, Input, Row } from 'antd';
 
 import ViewPasswords from '../ViewPasswords/ViewPasswords';
-import { genHashedPassword } from '../../utils/hashPassword';
+import { encryptPlainTextPassword } from '../../utils/hashPassword';
 import { saveHashedPassword } from '../../firebase/firebase.utils';
 import './styles.less';
 
@@ -10,6 +11,7 @@ const PasswordManager = ({ passwordString, uid }) => {
   const [visible, setVisible] = useState(false);
   const [websiteName, setWebsiteName] = useState('');
   const [plainPassword, setPlainPassword] = useState('');
+  const currentUser = useSelector(state => state.user.currentUser);
 
   useEffect(() => {
     setPlainPassword(passwordString);
@@ -17,8 +19,11 @@ const PasswordManager = ({ passwordString, uid }) => {
 
   const savePasswordInDatabase = e => {
     e.preventDefault();
-    let hashedPassword = genHashedPassword(passwordString);
-    let res = saveHashedPassword(websiteName, hashedPassword, uid);
+    const encryptedPassword = encryptPlainTextPassword(
+      passwordString,
+      currentUser.id
+    );
+    let res = saveHashedPassword(websiteName, encryptedPassword, uid);
     res
       .then(res => {
         if (res === 'Exists') {
