@@ -17,6 +17,11 @@ const encryptPlainTextPassword = (plainTextPassword, uid) => {
   return encryptedPassword.toString();
 };
 
+const encryptMasterPassword = (plainTextPassword, uid) => {
+  const encryptedMasterPassword = CryptoJS.AES.encrypt(plainTextPassword, uid);
+  return encryptedMasterPassword.toString();
+};
+
 const decryptPassword = async uid => {
   let res = await getPasswords(uid);
   res.forEach(encryptedPassword => {
@@ -34,5 +39,6 @@ const decryptPassword = async uid => {
 module.exports = {
   genHashedPassword,
   encryptPlainTextPassword,
-  decryptPassword
+  decryptPassword,
+  encryptMasterPassword
 };

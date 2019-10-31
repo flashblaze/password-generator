@@ -4,7 +4,8 @@ import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
-import PasswordManager from '../PasswordManager/PasswordManager';
+// import PasswordManager from '../PasswordManager/PasswordManager';
+import MasterPassword from '../MasterPassword/MasterPassword';
 import { generatePassword } from '../../utils/password';
 
 import './styles.less';
@@ -89,12 +90,7 @@ const PasswordConfig = () => {
             />
           </div>
           <div className="buttons">
-            {currentUser ? (
-              <PasswordManager
-                passwordString={passwordString}
-                uid={currentUser.id}
-              />
-            ) : null}
+            {currentUser ? <MasterPassword uid={currentUser.id} /> : null}
             <Button
               type="primary"
               style={{ float: 'right' }}
