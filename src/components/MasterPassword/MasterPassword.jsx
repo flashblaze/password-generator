@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Input, Modal } from 'antd';
 
 import { encryptMasterPassword } from '../../utils/hashPassword';
+import { setMasterPassword } from '../../redux/actions/password-action';
 
 const MasterPassword = ({ uid }) => {
   const [visible, setVisible] = useState(false);
   const [plainPassword, setPlainPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   // useState did not work
   let encryptedMasterPassword;
@@ -13,7 +17,8 @@ const MasterPassword = ({ uid }) => {
   const saveMasterPassword = () => {
     // useState did not work
     encryptedMasterPassword = encryptMasterPassword(plainPassword, uid);
-    console.log(encryptedMasterPassword);
+
+    dispatch(setMasterPassword(encryptedMasterPassword));
     setVisible(false);
     setPlainPassword('');
   };

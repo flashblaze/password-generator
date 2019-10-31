@@ -4,7 +4,7 @@ import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
-// import PasswordManager from '../PasswordManager/PasswordManager';
+import PasswordManager from '../PasswordManager/PasswordManager';
 import MasterPassword from '../MasterPassword/MasterPassword';
 import { generatePassword } from '../../utils/password';
 
@@ -22,6 +22,10 @@ const PasswordConfig = () => {
   let [passwordString, setPasswordString] = useState('');
 
   const currentUser = useSelector(state => state.user.currentUser);
+  const masterPassword = useSelector(
+    state => state.masterPassword.masterPassword
+  );
+  console.log(masterPassword);
   const genPassword = () => {
     passwordString = generatePassword(
       length,
@@ -90,7 +94,16 @@ const PasswordConfig = () => {
             />
           </div>
           <div className="buttons">
-            {currentUser ? <MasterPassword uid={currentUser.id} /> : null}
+            {currentUser ? (
+              masterPassword ? (
+                <PasswordManager
+                  passwordString={passwordString}
+                  uid={currentUser.id}
+                />
+              ) : (
+                <MasterPassword uid={currentUser.id} />
+              )
+            ) : null}
             <Button
               type="primary"
               style={{ float: 'right' }}
