@@ -32,15 +32,15 @@ const PasswordConfig = () => {
     async function checkMasterPassword() {
       if (currentUser !== null) {
         let val = await getMasterPasswordFirestore(currentUser.id);
-        dispatch(setMasterPassword(val.encryptedMasterPassword));
-        console.log('rendered');
+        if (val !== null) {
+          dispatch(setMasterPassword(val.encryptedMasterPassword));
+        } else {
+          dispatch(setMasterPassword(null));
+        }
       }
-
-      console.log('rendered');
     }
 
     checkMasterPassword();
-    console.log('rendered');
   }, [dispatch, currentUser]);
 
   const genPassword = () => {

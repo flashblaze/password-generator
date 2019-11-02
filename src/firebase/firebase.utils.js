@@ -102,7 +102,11 @@ export const getMasterPasswordFirestore = async uid => {
   const masterPassRef = firestore.collection(`masterPasswords/${uid}/${uid}`);
 
   const masterPassColl = await masterPassRef.get();
-  return masterPassColl.docs[0].data();
+  if (masterPassColl.empty) {
+    return null;
+  } else {
+    return masterPassColl.docs[0].data();
+  }
 };
 
 firebase.initializeApp(firebaseConfig);
