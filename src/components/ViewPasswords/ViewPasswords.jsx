@@ -4,8 +4,7 @@ import { Button, Dropdown, Icon, Input, Menu, message, Modal } from 'antd';
 
 import {
   compareMasterPasswords,
-  decryptPassword,
-  encryptMasterPassword
+  decryptPassword
 } from '../../utils/hashPassword';
 import './styles.less';
 
@@ -22,15 +21,9 @@ const ViewPasswords = () => {
   );
 
   const verifyMasterPassword = () => {
-    const returnedEncryptedMasterPassword = encryptMasterPassword(
-      plainMasterPassword,
-      currentUser.id
-    );
     const result = compareMasterPasswords(
-      returnedEncryptedMasterPassword,
-      encryptedMasterPassword,
       plainMasterPassword,
-      currentUser.id
+      encryptedMasterPassword
     );
 
     if (result) {
