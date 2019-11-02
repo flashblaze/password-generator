@@ -26,10 +26,10 @@ const ViewPasswords = () => {
       plainMasterPassword,
       currentUser.id
     );
-
     const result = compareMasterPasswords(
       returnedEncryptedMasterPassword,
       encryptedMasterPassword,
+      plainMasterPassword,
       currentUser.id
     );
 

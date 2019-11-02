@@ -18,7 +18,10 @@ const encryptPlainTextPassword = (plainTextPassword, uid) => {
 };
 
 const encryptMasterPassword = (plainTextPassword, uid) => {
-  const encryptedMasterPassword = CryptoJS.AES.encrypt(plainTextPassword, uid);
+  const encryptedMasterPassword = CryptoJS.AES.encrypt(
+    plainTextPassword,
+    plainTextPassword + uid
+  );
   return encryptedMasterPassword.toString();
 };
 
@@ -36,9 +39,21 @@ const decryptPassword = async uid => {
   return res;
 };
 
-const compareMasterPasswords = (newMasterPassword, oldMasterPassword, uid) => {
-  const newDecryptedPassword = CryptoJS.AES.decrypt(newMasterPassword, uid);
-  const oldDecryptedPassword = CryptoJS.AES.decrypt(oldMasterPassword, uid);
+const compareMasterPasswords = (
+  newMasterPassword,
+  oldMasterPassword,
+  plainMasterPassword,
+  uid
+) => {
+  const newDecryptedPassword = CryptoJS.AES.decrypt(
+    newMasterPassword,
+    plainMasterPassword + uid
+  );
+
+  const oldDecryptedPassword = CryptoJS.AES.decrypt(
+    oldMasterPassword,
+    plainMasterPassword + uid
+  );
 
   return (
     newDecryptedPassword.toString(CryptoJS.enc.Utf8) ===
