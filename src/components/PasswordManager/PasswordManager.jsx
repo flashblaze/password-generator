@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Col, Drawer, Form, Input, Row } from 'antd';
+import { Button, Col, Drawer, Form, Input, message, Row } from 'antd';
 
 import ViewPasswords from '../ViewPasswords/ViewPasswords';
 import { encryptPlainTextPassword } from '../../utils/hashPassword';
@@ -26,11 +26,12 @@ const PasswordManager = ({ passwordString, uid }) => {
     let res = saveHashedPassword(websiteName, encryptedPassword, uid);
     res
       .then(res => {
-        if (res === 'Exists') {
-          alert(`Password for ${websiteName} already exists`);
+        if (res === null) {
+          message.error(`Password for ${websiteName} already exists`);
         } else {
           setWebsiteName('');
           setPlainPassword('');
+          message.success(`Password added successfully`);
         }
       })
       .catch(e => {

@@ -1,15 +1,47 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Icon, Input, Menu } from 'antd';
-
-import './styles.less';
 import { useSelector } from 'react-redux';
-import { decryptPassword } from '../../utils/hashPassword';
+import { Button, Dropdown, Icon, Input, Menu, message, Modal } from 'antd';
+
+import {
+  compareMasterPasswords,
+  decryptPassword,
+  encryptMasterPassword
+} from '../../utils/hashPassword';
+import './styles.less';
 
 const ViewPasswords = () => {
   let [passwordsData, setPasswordsData] = useState([]);
   const [hashedPass, setHashedPass] = useState('');
+  const [plainMasterPassword, setPlainMasterPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
   const currentUser = useSelector(state => state.user.currentUser);
+  const encryptedMasterPassword = useSelector(
+    state => state.masterPassword.masterPassword
+  );
+
+  const verifyMasterPassword = () => {
+    const returnedEncryptedMasterPassword = encryptMasterPassword(
+      plainMasterPassword,
+      currentUser.id
+    );
+
+    const result = compareMasterPasswords(
+      returnedEncryptedMasterPassword,
+      encryptedMasterPassword,
+      currentUser.id
+    );
+
+    if (result) {
+      message.success('Passwords verified');
+      setVisible(false);
+      setIsValid(true);
+    } else {
+      message.error('Incorrect master password');
+      setVisible(true);
+    }
+  };
 
   const getPass = async () => {
     let res = await decryptPassword(currentUser.id);
@@ -35,20 +67,42 @@ const ViewPasswords = () => {
     </Menu>
   );
 
-  return (
-    <div className="buttons">
-      <Dropdown overlay={menu} trigger={['click']} onClick={() => getPass()}>
-        <Button>
-          View Passwords <Icon type="down" />
-        </Button>
-      </Dropdown>
-      <Input.Password
-        value={hashedPass}
-        placeholder="Fetched password"
-        style={{ width: 243 }}
-      />
-    </div>
-  );
+  if (isValid) {
+    return (
+      <div className="buttons">
+        <Dropdown overlay={menu} trigger={['click']} onClick={() => getPass()}>
+          <Button>
+            View Passwords <Icon type="down" />
+          </Button>
+        </Dropdown>
+        <Input.Password
+          value={hashedPass}
+          placeholder="Fetched password"
+          style={{ width: 243 }}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Button onClick={() => setVisible(true)}>View Passwords</Button>
+        <Modal
+          title="Master Password"
+          visible={visible}
+          onOk={() => verifyMasterPassword()}
+          onCancel={() => setVisible(false)}
+        >
+          <div>
+            <p>Enter master password for additional security</p>
+            <Input.Password
+              value={plainMasterPassword}
+              onChange={e => setPlainMasterPassword(e.target.value)}
+            />
+          </div>
+        </Modal>
+      </div>
+    );
+  }
 };
 
 export default ViewPasswords;

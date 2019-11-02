@@ -36,9 +36,20 @@ const decryptPassword = async uid => {
   return res;
 };
 
+const compareMasterPasswords = (newMasterPassword, oldMasterPassword, uid) => {
+  const newDecryptedPassword = CryptoJS.AES.decrypt(newMasterPassword, uid);
+  const oldDecryptedPassword = CryptoJS.AES.decrypt(oldMasterPassword, uid);
+
+  return (
+    newDecryptedPassword.toString(CryptoJS.enc.Utf8) ===
+    oldDecryptedPassword.toString(CryptoJS.enc.Utf8)
+  );
+};
+
 module.exports = {
   genHashedPassword,
   encryptPlainTextPassword,
   decryptPassword,
-  encryptMasterPassword
+  encryptMasterPassword,
+  compareMasterPasswords
 };

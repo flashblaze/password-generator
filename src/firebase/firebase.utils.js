@@ -63,7 +63,7 @@ export const saveHashedPassword = async (
       console.log(`Error storing password ${e.message}`);
     }
   } else {
-    return 'Exists';
+    return null;
   }
 };
 
@@ -93,7 +93,7 @@ export const storeMasterPassword = async (encryptedMasterPassword, uid) => {
       console.log(`Error storing master password ${e.mesage}`);
     }
   } else {
-    return 'Exists';
+    return null;
   }
   return masterPassRef;
 };

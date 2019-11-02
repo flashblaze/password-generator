@@ -19,7 +19,7 @@ const MasterPassword = ({ uid }) => {
     // useState did not work
     encryptedMasterPassword = encryptMasterPassword(plainPassword, uid);
     let retVal = await storeMasterPassword(encryptedMasterPassword, uid);
-    if (retVal !== 'Exists') {
+    if (retVal !== null) {
       dispatch(setMasterPassword(encryptedMasterPassword));
       setVisible(false);
     }
