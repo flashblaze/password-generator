@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Dropdown, Icon, Input, Menu, message, Modal } from 'antd';
 
 import {
   compareMasterPasswords,
   decryptPassword
 } from '../../utils/hashPassword';
+import { storeTempMasterPassword } from '../../redux/actions/password-action';
 import './styles.less';
 
 const ViewPasswords = () => {
@@ -20,6 +21,8 @@ const ViewPasswords = () => {
     state => state.masterPassword.masterPassword
   );
 
+  const dispatch = useDispatch();
+
   const verifyMasterPassword = () => {
     const result = compareMasterPasswords(
       plainMasterPassword,
@@ -28,6 +31,7 @@ const ViewPasswords = () => {
 
     if (result) {
       message.success('Passwords verified');
+      dispatch(storeTempMasterPassword(plainMasterPassword));
       setVisible(false);
       setIsValid(true);
     } else {
@@ -37,7 +41,7 @@ const ViewPasswords = () => {
   };
 
   const getPass = async () => {
-    let res = await decryptPassword(currentUser.id);
+    let res = await decryptPassword(plainMasterPassword, currentUser.id);
     setPasswordsData([...res]);
   };
 
@@ -86,7 +90,7 @@ const ViewPasswords = () => {
           onCancel={() => setVisible(false)}
         >
           <div>
-            <p>Enter master password for additional security</p>
+            <p>Enter master password for verification</p>
             <Input.Password
               value={plainMasterPassword}
               onChange={e => setPlainMasterPassword(e.target.value)}

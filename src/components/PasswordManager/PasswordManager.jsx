@@ -12,6 +12,9 @@ const PasswordManager = ({ passwordString, uid }) => {
   const [websiteName, setWebsiteName] = useState('');
   const [plainPassword, setPlainPassword] = useState('');
   const currentUser = useSelector(state => state.user.currentUser);
+  const tempMasterPassword = useSelector(
+    state => state.masterPassword.tempMasterPassword
+  );
 
   useEffect(() => {
     setPlainPassword(passwordString);
@@ -21,6 +24,7 @@ const PasswordManager = ({ passwordString, uid }) => {
     e.preventDefault();
     const encryptedPassword = encryptPlainTextPassword(
       passwordString,
+      tempMasterPassword,
       currentUser.id
     );
     let res = saveHashedPassword(websiteName, encryptedPassword, uid);

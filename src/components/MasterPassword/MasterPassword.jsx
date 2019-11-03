@@ -3,7 +3,10 @@ import { useDispatch } from 'react-redux';
 import { Button, Input, Modal } from 'antd';
 
 import { encryptMasterPassword } from '../../utils/hashPassword';
-import { setMasterPassword } from '../../redux/actions/password-action';
+import {
+  setMasterPassword,
+  storeTempMasterPassword
+} from '../../redux/actions/password-action';
 import { storeMasterPassword } from '../../firebase/firebase.utils';
 
 const MasterPassword = ({ uid }) => {
@@ -21,6 +24,7 @@ const MasterPassword = ({ uid }) => {
     let retVal = await storeMasterPassword(encryptedMasterPassword, uid);
     if (retVal !== null) {
       dispatch(setMasterPassword(encryptedMasterPassword));
+      dispatch(storeTempMasterPassword(plainPassword));
       setVisible(false);
     }
 

@@ -1,7 +1,8 @@
 import { passwordActionTypes } from '../types/password-types';
 
 const INITIAL_STATE = {
-  masterPassword: null
+  masterPassword: null,
+  tempMasterPassword: null
 };
 
 const masterPasswordReducer = (state = INITIAL_STATE, action) => {
@@ -10,6 +11,11 @@ const masterPasswordReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         masterPassword: action.payload
+      };
+    case passwordActionTypes.STORE_MASTER_PASSWORD_TEMP:
+      return {
+        ...state,
+        tempMasterPassword: action.payload
       };
     default:
       return state;

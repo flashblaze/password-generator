@@ -12,8 +12,15 @@ const genHashedPassword = plainTextPassword => {
   }
 };
 
-const encryptPlainTextPassword = (plainTextPassword, uid) => {
-  const encryptedPassword = CryptoJS.AES.encrypt(plainTextPassword, uid);
+const encryptPlainTextPassword = (
+  plainTextPassword,
+  tempMasterPassword,
+  uid
+) => {
+  const encryptedPassword = CryptoJS.AES.encrypt(
+    plainTextPassword,
+    uid.slice(3, 8) + tempMasterPassword + uid
+  );
   return encryptedPassword.toString();
 };
 
@@ -23,12 +30,12 @@ const encryptMasterPassword = plainTextPassword => {
   return hashedPassword;
 };
 
-const decryptPassword = async uid => {
+const decryptPassword = async (tempMasterPassword, uid) => {
   let res = await getPasswords(uid);
   res.forEach(encryptedPassword => {
     let decryptedPassword = CryptoJS.AES.decrypt(
       encryptedPassword.hashedPassword,
-      uid
+      uid.slice(3, 8) + tempMasterPassword + uid
     );
     encryptedPassword.hashedPassword = decryptedPassword.toString(
       CryptoJS.enc.Utf8
