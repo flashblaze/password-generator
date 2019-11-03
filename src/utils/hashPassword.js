@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const CryptoJS = require('crypto-js');
 const { getPasswords } = require('../firebase/firebase.utils');
 
-const genHashedPassword = plainTextPassword => {
+export const genHashedPassword = plainTextPassword => {
   if (plainTextPassword === '') {
     return null;
   } else {
@@ -12,7 +12,7 @@ const genHashedPassword = plainTextPassword => {
   }
 };
 
-const encryptPlainTextPassword = (
+export const encryptPlainTextPassword = (
   plainTextPassword,
   tempMasterPassword,
   uid
@@ -24,13 +24,13 @@ const encryptPlainTextPassword = (
   return encryptedPassword.toString();
 };
 
-const encryptMasterPassword = plainTextPassword => {
+export const encryptMasterPassword = plainTextPassword => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(plainTextPassword, salt);
   return hashedPassword;
 };
 
-const decryptPassword = async (tempMasterPassword, uid) => {
+export const decryptPassword = async (tempMasterPassword, uid) => {
   let res = await getPasswords(uid);
   res.forEach(encryptedPassword => {
     let decryptedPassword = CryptoJS.AES.decrypt(
@@ -44,13 +44,9 @@ const decryptPassword = async (tempMasterPassword, uid) => {
   return res;
 };
 
-const compareMasterPasswords = (plainMasterPassword, encryptedMasterPassword) =>
-  bcrypt.compareSync(plainMasterPassword, encryptedMasterPassword);
-
-module.exports = {
-  genHashedPassword,
-  encryptPlainTextPassword,
-  decryptPassword,
-  encryptMasterPassword,
-  compareMasterPasswords
+export const compareMasterPasswords = (
+  plainMasterPassword,
+  encryptedMasterPassword
+) => {
+  return bcrypt.compareSync(plainMasterPassword, encryptedMasterPassword);
 };

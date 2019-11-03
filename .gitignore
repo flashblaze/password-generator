@@ -22,4 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# custom
 trial-script.js
+
+#firebase
+.firebaserc
+firebase-debug.log
+.firebase
