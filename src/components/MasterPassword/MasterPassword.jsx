@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input, message, Modal } from 'antd';
 
 import { encryptMasterPassword } from '../../utils/hashPassword';
 import {
@@ -25,6 +25,7 @@ const MasterPassword = ({ uid }) => {
     if (retVal !== null) {
       dispatch(setMasterPassword(encryptedMasterPassword));
       dispatch(storeTempMasterPassword(plainPassword));
+      message.success('Master password created successfully');
       setVisible(false);
     }
 

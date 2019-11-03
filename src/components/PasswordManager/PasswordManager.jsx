@@ -5,12 +5,15 @@ import { Button, Col, Drawer, Form, Input, message, Row } from 'antd';
 import ViewPasswords from '../ViewPasswords/ViewPasswords';
 import { encryptPlainTextPassword } from '../../utils/hashPassword';
 import { saveHashedPassword } from '../../firebase/firebase.utils';
+
 import './styles.less';
 
 const PasswordManager = ({ passwordString, uid }) => {
   const [visible, setVisible] = useState(false);
   const [websiteName, setWebsiteName] = useState('');
   const [plainPassword, setPlainPassword] = useState('');
+  const deviceWidth = window.innerWidth;
+
   const currentUser = useSelector(state => state.user.currentUser);
   const tempMasterPassword = useSelector(
     state => state.masterPassword.tempMasterPassword
@@ -50,9 +53,8 @@ const PasswordManager = ({ passwordString, uid }) => {
       </Button>
       <Drawer
         title="Password Manager"
-        placement="right"
+        width={deviceWidth > 720 ? '35%' : '100%'}
         closable={false}
-        width={550}
         onClose={() => setVisible(false)}
         visible={visible}
       >
@@ -68,6 +70,7 @@ const PasswordManager = ({ passwordString, uid }) => {
                   placeholder="Name of website/account"
                   onChange={e => setWebsiteName(e.target.value)}
                   value={websiteName}
+                  required={true}
                 />
               </Form.Item>
             </Col>
@@ -77,6 +80,7 @@ const PasswordManager = ({ passwordString, uid }) => {
                   style={{ width: '100%' }}
                   placeholder="Password"
                   value={plainPassword}
+                  required={true}
                 />
               </Form.Item>
             </Col>
