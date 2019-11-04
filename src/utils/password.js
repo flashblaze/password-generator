@@ -1,3 +1,5 @@
+// https://codepen.io/FlorinPop17/pen/BaBePej
+
 const generatePassword = (length, upper, lower, number, symbol) => {
   let generatedPassword = '';
   const typesCount = lower + upper + number + symbol;
