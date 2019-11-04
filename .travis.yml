@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - '10.0'
+cache:
+  directories:
+    - node_modules
+before_install:
+  - npm install -g firebase-tools
+install:
+  - npm install
+script:
+  - npm run build
+after_success:
+  - firebase deploy --token $FIREBASE_TOKEN --project "password-generator-3cd5e"
