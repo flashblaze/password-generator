@@ -1,4 +1,4 @@
-# Password Generator
+# Password Generator [![Build Status](https://travis-ci.com/FlashBlaze/password-generator.svg?branch=master)](https://travis-ci.com/FlashBlaze/password-generator)
 
 A simple password generator and manager using
 

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Card, Checkbox, Icon, Input, InputNumber } from 'antd';
+import {
+  Card,
+  Col,
+  Checkbox,
+  Icon,
+  Input,
+  InputNumber,
+  Row,
+  Slider
+} from 'antd';
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
@@ -43,9 +52,10 @@ const PasswordConfig = () => {
     checkMasterPassword();
   }, [dispatch, currentUser]);
 
-  const genPassword = () => {
+  const genPassword = e => {
+    setLength(e);
     passwordString = generatePassword(
-      length,
+      e,
       upperChecked,
       lowerChecked,
       numbersChecked,
@@ -72,16 +82,25 @@ const PasswordConfig = () => {
               Welcome <b>{currentUser.displayName}</b>
             </h4>
           ) : null}
-
-          <div className="setting">
-            <p>Password length</p>
-            <InputNumber
-              placeholder={4}
-              min={4}
-              value={length}
-              onChange={e => setLength(e)}
-            />
-          </div>
+          <Row style={{ margin: '15px 0' }}>
+            <Col span={10}>
+              <Slider
+                min={4}
+                max={50}
+                onChange={e => genPassword(e)}
+                value={length}
+              />
+            </Col>
+            <Col span={8} />
+            <Col span={6}>
+              <InputNumber
+                placeholder={length}
+                min={4}
+                value={length}
+                onChange={e => genPassword(e)}
+              />
+            </Col>
+          </Row>
           <div className="setting">
             <p>Uppercase Letters</p>
             <Checkbox
@@ -121,13 +140,6 @@ const PasswordConfig = () => {
                 <MasterPassword uid={currentUser.id} />
               )
             ) : null}
-            <Button
-              type="primary"
-              style={{ float: 'right' }}
-              onClick={() => genPassword()}
-            >
-              Generate
-            </Button>
           </div>
         </div>
         {passGenerated ? (
@@ -144,7 +156,13 @@ const PasswordConfig = () => {
                 onClick={() => copyPassword()}
                 style={{ marginRight: '20px' }}
               />
-              <Icon type="delete" onClick={() => setPasswordString('')} />
+              <Icon
+                type="delete"
+                onClick={() => {
+                  setPasswordString('');
+                  setLength(8);
+                }}
+              />
             </div>
           </div>
         ) : null}
