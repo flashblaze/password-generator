@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Button, Col, Drawer, Form, Input, message, Row } from 'antd';
 
 import ViewPasswords from '../ViewPasswords/ViewPasswords';
@@ -95,6 +96,11 @@ const PasswordManager = ({ passwordString, uid }) => {
           </div>
         </Form>
         <ViewPasswords />
+        <Link to="/profile">
+          <Button className="profile-button" icon="setting">
+            Profile
+          </Button>
+        </Link>
       </Drawer>
     </div>
   );
