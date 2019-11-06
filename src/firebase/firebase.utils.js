@@ -114,17 +114,20 @@ export const deletePasswords = async uid => {
   const passRef = firestore.collection(`passwords/${uid}/${uid}`);
   const passSnapShot = await passRef.get();
 
-  let docIds = [];
+  const masterPassRef = firestore.collection(`masterPasswords/${uid}/${uid}`);
+  const masterPassSnapshot = await masterPassRef.get();
 
-  if (passSnapShot.empty) {
+  if (passSnapShot.empty && masterPassSnapshot.empty) {
     return null;
   } else {
     passSnapShot.forEach(doc => {
-      docIds.push(doc.id);
+      firestore.doc(`passwords/${uid}/${uid}/${doc.id}`).delete();
     });
-    docIds.forEach(docId => {
-      firestore.doc(`passwords/${uid}/${uid}/${docId}`).delete();
+
+    masterPassSnapshot.forEach(doc => {
+      firestore.doc(`masterPasswords/${uid}/${uid}/${doc.id}`).delete();
     });
+
     return 'Deleted';
   }
 };
