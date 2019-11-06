@@ -110,6 +110,25 @@ export const getMasterPasswordFirestore = async uid => {
   }
 };
 
+export const deletePasswords = async uid => {
+  const passRef = firestore.collection(`passwords/${uid}/${uid}`);
+  const passSnapShot = await passRef.get();
+
+  let docIds = [];
+
+  if (passSnapShot.empty) {
+    return null;
+  } else {
+    passSnapShot.forEach(doc => {
+      docIds.push(doc.id);
+    });
+    docIds.forEach(docId => {
+      firestore.doc(`passwords/${uid}/${uid}/${docId}`).delete();
+    });
+    return 'Deleted';
+  }
+};
+
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
