@@ -79,6 +79,27 @@ export const getPasswords = async uid => {
   return passwordsData;
 };
 
+export const saveNewHashedPasswords = async (passwordData, uid) => {
+  const passRef = firestore.doc(
+    `passwords/${uid}/${uid}/${uid}-${passwordData.websiteName}`
+  );
+
+  const createdAt = new Date();
+  let websiteName = passwordData.websiteName;
+  let originalWebsiteName = passwordData.originalWebsiteName;
+  let hashedPassword = passwordData.hashedPassword;
+  try {
+    await passRef.set({
+      originalWebsiteName,
+      websiteName,
+      hashedPassword,
+      createdAt
+    });
+  } catch (e) {
+    console.log(`Error storing password ${e.message}`);
+  }
+};
+
 export const storeMasterPassword = async (encryptedMasterPassword, uid) => {
   const masterPassRef = firestore.collection(`masterPasswords/${uid}/${uid}`);
 

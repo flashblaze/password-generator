@@ -10,11 +10,14 @@ import {
 import {
   deleteMasterPassword,
   deletePasswords,
-  storeMasterPassword
+  storeMasterPassword,
+  saveNewHashedPasswords
 } from '../../firebase/firebase.utils';
 import {
   compareMasterPasswords,
-  encryptMasterPassword
+  decryptPassword,
+  encryptMasterPassword,
+  encryptPlainTextPassword
 } from '../../utils/hashPassword';
 import './styles.less';
 
@@ -56,8 +59,23 @@ const Profile = () => {
     });
   };
 
+  const changeHashOfOldPasswords = async () => {
+    const res = await decryptPassword(oldMasterPassword, currentUser.id);
+    deletePasswords(currentUser.id);
+    res.forEach(async passwordData => {
+      const newEncryptedPassword = encryptPlainTextPassword(
+        passwordData.hashedPassword,
+        newMasterPassword,
+        currentUser.id
+      );
+      passwordData.hashedPassword = newEncryptedPassword;
+      await saveNewHashedPasswords(passwordData, currentUser.id);
+    });
+  };
+
   const changeMasterPassword = async () => {
     const res = compareMasterPasswords(oldMasterPassword, masterPassword);
+
     if (res) {
       const newHashedMasterPassword = encryptMasterPassword(newMasterPassword);
       await deleteMasterPassword(currentUser.id);
@@ -67,12 +85,16 @@ const Profile = () => {
       );
       dispatch(setMasterPassword(newHashedMasterPassword));
       dispatch(storeTempMasterPassword(newMasterPassword));
+
       if (res !== null) {
         message.success('Master password changed successfully');
+        setOldMasterPassword('');
+        setNewMasterPassword('');
+        changeHashOfOldPasswords();
+        setVisible(false);
       } else {
         message.error('Error changing master password');
       }
-      setVisible(false);
     } else {
       message.error('Entered master password does not match');
     }
@@ -82,9 +104,9 @@ const Profile = () => {
     <div className="container">
       <Card title="Profile">
         <div>
-          {/* <Button type="default" onClick={() => setVisible(true)}>
+          <Button type="default" onClick={() => setVisible(true)}>
             Change master password
-          </Button> */}
+          </Button>
           <Modal
             title="Master Password"
             visible={visible}
