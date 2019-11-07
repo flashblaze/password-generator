@@ -2,16 +2,6 @@ const bcrypt = require('bcryptjs');
 const CryptoJS = require('crypto-js');
 const { getPasswords } = require('../firebase/firebase.utils');
 
-export const genHashedPassword = plainTextPassword => {
-  if (plainTextPassword === '') {
-    return null;
-  } else {
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(plainTextPassword, salt);
-    return hashedPassword;
-  }
-};
-
 export const encryptPlainTextPassword = (
   plainTextPassword,
   tempMasterPassword,
