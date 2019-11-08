@@ -13,12 +13,12 @@ import {
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
+
 import PasswordManager from '../PasswordManager/PasswordManager';
 import MasterPassword from '../MasterPassword/MasterPassword';
 import { generatePassword } from '../../utils/password';
 import { getMasterPasswordFirestore } from '../../firebase/firebase.utils';
 import { setMasterPassword } from '../../redux/actions/password-action';
-
 import './styles.less';
 
 const { TextArea } = Input;

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { Button, Col, Drawer, Form, Input, message, Row } from 'antd';
 
 import ViewPasswords from '../ViewPasswords/ViewPasswords';
-import { encryptPlainTextPassword } from '../../utils/hashPassword';
-import { saveHashedPassword } from '../../firebase/firebase.utils';
 
+import { saveHashedPassword } from '../../firebase/firebase.utils';
+import { encryptPlainTextPassword } from '../../utils/hashPassword';
 import './styles.less';
 
 const PasswordManager = ({ passwordString, uid }) => {
