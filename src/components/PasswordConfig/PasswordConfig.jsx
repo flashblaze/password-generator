@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  Button,
   Card,
   Col,
   Checkbox,
@@ -37,7 +38,9 @@ const PasswordConfig = () => {
   const masterPassword = useSelector(
     state => state.masterPassword.masterPassword
   );
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     async function checkMasterPassword() {
       if (currentUser !== null) {
@@ -53,7 +56,7 @@ const PasswordConfig = () => {
     checkMasterPassword();
   }, [dispatch, currentUser]);
 
-  const genPassword = e => {
+  const genPassword = (e = 8) => {
     setLength(e);
     passwordString = generatePassword(
       e,
@@ -141,6 +144,13 @@ const PasswordConfig = () => {
                 <MasterPassword uid={currentUser.id} />
               )
             ) : null}
+            <Button
+              type="primary"
+              style={{ float: 'right' }}
+              onClick={() => genPassword(length)}
+            >
+              Generate
+            </Button>
           </div>
         </div>
         {passGenerated ? (
