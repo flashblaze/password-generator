@@ -13,9 +13,10 @@ import {
 
 import SignIn from '../SignIn/SignIn';
 import SignOut from '../SignOut/SignOut';
-
+import Footer from '../Footer/Footer';
 import PasswordManager from '../PasswordManager/PasswordManager';
 import MasterPassword from '../MasterPassword/MasterPassword';
+
 import { generatePassword } from '../../utils/password';
 import { getMasterPasswordFirestore } from '../../firebase/firebase.utils';
 import { setMasterPassword } from '../../redux/actions/password-action';
@@ -170,6 +171,7 @@ const PasswordConfig = () => {
       <div style={{ margin: '20px 0', float: 'right' }}>
         {!currentUser ? <SignIn /> : <SignOut />}
       </div>
+      <Footer />
     </div>
   );
 };
